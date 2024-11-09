@@ -1,5 +1,8 @@
 package ingenieria.de.software._0.albergo.entidad;
 
+import ingenieria.de.software._0.albergo.enums.UserRole;
+import ingenieria.de.software._0.albergo.dto.UserDto;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -7,8 +10,6 @@ import jakarta.persistence.GenerationType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.GrantedAuthority;
-
-import ingenieria.de.software._0.albergo.enums.UserRole;
 
 import jakarta.persistence.Id;
 import lombok.Data;
@@ -37,7 +38,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(userRole.name())); // or return appropriate authorities
+        return List.of(new SimpleGrantedAuthority(userRole.name()));
     }
 
     @Override
@@ -63,5 +64,15 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public UserDto getUserDto() {
+        UserDto dto = new UserDto();
+        dto.setId(id);
+        dto.setName(name);
+        dto.setEmail(email);
+        dto.setUserRole(userRole);
+
+        return dto;
     }
 }
