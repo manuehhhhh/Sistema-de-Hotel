@@ -15,7 +15,6 @@ import javax.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
 import java.util.Optional;
 
-
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -23,17 +22,20 @@ public class AuthServiceImpl implements AuthService {
 
     @PostConstruct
     public void createAnAdminAccount() {
-        Optional<User> adminAccount = userRepository.findByUserRole(UserRole.ADMIN);
-        if (adminAccount.isEmpty()) {
-            User user = new User();
-            user.setEmail("admin@hotel.com");
-            user.setName("Admin");
-            user.setUserRole(UserRole.ADMIN);
-            user.setPassword(new BCryptPasswordEncoder().encode("admin"));
-            userRepository.save(user);
-            System.out.println("Cuenta de administrador creada con éxito");
-        } else {
-            throw new IllegalStateException("Ya existe la cuenta de administrador");
+        try {
+            Optional<User> adminAccount = userRepository.findByUserRole(UserRole.ADMIN);
+            if (adminAccount.isEmpty()) {
+                User user = new User();
+                user.setEmail("admin@hotel.com");
+                user.setName("Admin");
+                user.setUserRole(UserRole.ADMIN);
+                user.setPassword(new BCryptPasswordEncoder().encode("admin"));
+                userRepository.save(user);
+                System.out.println("Cuenta de administrador creada con éxito");
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); 
+            throw new IllegalStateException("Error al crear la cuenta de administrador", e);
         }
     }
 
