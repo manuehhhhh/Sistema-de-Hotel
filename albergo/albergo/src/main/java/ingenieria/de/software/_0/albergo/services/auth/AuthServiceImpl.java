@@ -18,14 +18,12 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-
 public class AuthServiceImpl implements AuthService {
     private final UserRepo userRepository;
 
     @PostConstruct
-
     public void createAnAdminAccount() {
-        Optional <User> adminAccount = userRepository.findByUserRole(UserRole.ADMIN);
+        Optional<User> adminAccount = userRepository.findByUserRole(UserRole.ADMIN);
         if (adminAccount.isEmpty()) {
             User user = new User();
             user.setEmail("admin@hotel.com");
@@ -39,6 +37,7 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
+    @Override
     public UserDto createUser(SignupRequest signupRequest) {
         if (userRepository.findFirstByEmail(signupRequest.getEmail()).isPresent()) {
             throw new EntityExistsException("Este correo ya está asociado a una cuenta");

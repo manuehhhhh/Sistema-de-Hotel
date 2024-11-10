@@ -23,12 +23,11 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-
     public ResponseEntity<?> signupUser(@RequestBody SignupRequest signupRequest) {
         try {
             UserDto createdUser = authService.createUser(signupRequest);
-            return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
-        } catch (EntityExistsException EntityExistsException) {
+            return new ResponseEntity<>(createdUser, HttpStatus.OK);
+        } catch (EntityExistsException entityExistsException) {
             return new ResponseEntity<>("El usuario ya existe", HttpStatus.NOT_ACCEPTABLE);
         } catch (Exception e) {
             return new ResponseEntity<>("Error al crear el usuario", HttpStatus.BAD_REQUEST);
